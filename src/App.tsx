@@ -1,8 +1,23 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-function App() {
-    return <div className="App">react app</div>;
+import './App.css'
+import Login from './main/Login'
+import store from './store'
+
+function App(): JSX.Element {
+    return (
+        <Provider store={store}>
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <Login />
+                    </Route>
+                </Switch>
+            </Router>
+        </Provider>
+    )
 }
 
-export default App;
+export default App
