@@ -40,9 +40,9 @@ function Login(): JSX.Element {
         <Card>
             <CardContent>
                 <Typography>Your Name</Typography>
-                <form className="flex flex-col login-form" action="">
-                    <TextField className="w-full" label="Email" name="email" type="email" value={emailId} onChange={handleChange} />
-                    <Button className="login-btn" color="primary" variant="contained" aria-label="Login" type="submit" onClick={handleSubmit}>
+                <form role="form" className="flex flex-col login-form" action="">
+                    <TextField className="w-full" label="Email" id="email" name="email" type="email" value={emailId} onChange={handleChange} />
+                    <Button className="login-btn" role="button" color="primary" variant="contained" aria-label="Login" type="submit" onClick={handleSubmit}>
                         Login
                     </Button>
                 </form>

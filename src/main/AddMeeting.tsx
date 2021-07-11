@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, forwardRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Card, CardContent, Typography, TextField, IconButton, Icon, makeStyles, CardActions, Button } from '@material-ui/core'
@@ -18,9 +18,10 @@ const useStyles = makeStyles({
     },
 })
 
-function DateInput(props: never) {
-    return <TextField className="mt-5" label="Meeting Date" {...props} />
-}
+// eslint-disable-next-line react/display-name
+const DateInput = forwardRef((props: never, ref) => {
+    return <TextField ref={ref} className="mt-5" label="Meeting Date" {...props} />
+})
 
 const defaultLocation: GeolocationCoordinates = {
     latitude: 0.0,
@@ -78,7 +79,7 @@ function AddMeeting(): JSX.Element {
                 </CardActions>
                 <Logout />
                 <div className="flex flex-col">
-                    <TextField className={classes.margin} label="Person Name" value={name} onChange={handleNameChange} />
+                    <TextField className={classes.margin} id="person_name" label="Person Name" value={name} onChange={handleNameChange} />
                     <DayPickerInput component={DateInput} value={meetingDate} onDayChange={handleDateChange} />
                     <div className={clsx(classes.margin, 'flex items-center mt-5')}>
                         <Typography className={classes.margin}>

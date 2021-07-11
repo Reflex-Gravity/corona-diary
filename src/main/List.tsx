@@ -193,6 +193,7 @@ function List() {
                             // When no data show a message
                             filteredData.length === 0 && <NoData />
                         }
+                        {/* Show grouped data if groupBy is selected */}
                         {filter.groupBy ? (
                             <GroupedListItem groupedData={groupedData} />
                         ) : (

@@ -1,4 +1,4 @@
-import { setStorageData } from 'main/utils/storage.handler'
+import { removeStorageData, setStorageData } from 'main/utils/storage.handler'
 import { Meetings } from './types'
 
 export const SET_USER = 'SET_USER'
@@ -19,7 +19,8 @@ type ResetAction = {
 }
 
 export function resetData(): ResetAction {
-    setStorageData('localStorage', 'state', null)
+    removeStorageData('localStorage', 'state')
+    removeStorageData('sessionStorage', 'sessionUser')
     return {
         type: RESET_DATA,
     }
