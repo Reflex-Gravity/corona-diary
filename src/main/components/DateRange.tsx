@@ -3,12 +3,30 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { makeStyles, TextField } from '@material-ui/core'
 import 'react-day-picker/lib/style.css'
 import { DateRangeType } from 'main/types/DateRange'
+import clsx from 'clsx'
 
 const useStyles = makeStyles({
     dateInput: {
         marginLeft: 10,
     },
+    toDateWrapper: {
+        right: 0,
+    },
 })
+
+type OverlayComponentProps = {
+    children: Element,
+}
+
+function OverlayComponent({ children, ...props }: OverlayComponentProps) {
+    const classes = useStyles()
+
+    return (
+        <div className={clsx(classes.toDateWrapper)} {...props}>
+            {children}
+        </div>
+    )
+}
 
 // eslint-disable-next-line react/display-name
 const DateInput = forwardRef((props: never, ref) => {
@@ -42,6 +60,7 @@ function DateRange({ fromDate, toDate, handleDateChange }: DateRangeType): JSX.E
                 value={toDate ? new Date(toDate) : undefined}
                 placeholder="End Date"
                 format="DD/MM/YYYY"
+                overlayComponent={OverlayComponent}
                 component={DateInput}
                 dayPickerProps={{
                     disabledDays: { before: new Date(fromDate ?? '') },

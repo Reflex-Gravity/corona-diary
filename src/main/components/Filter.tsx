@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         right: 0,
         width: 400,
         zIndex: 30,
-        height: 450,
+        height: 500,
     },
     cardHeader: {
         display: 'flex',
