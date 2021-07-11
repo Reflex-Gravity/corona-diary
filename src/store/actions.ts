@@ -1,6 +1,8 @@
+import { setStorageData } from 'main/utils/storage.handler'
 import { Meetings } from './types'
 
 export const SET_USER = 'SET_USER'
+export const RESET_DATA = 'RESET_DATA'
 export const ADD_MEETING = 'ADD_MEETING'
 
 type UserAction = {
@@ -11,6 +13,16 @@ type UserAction = {
 type AddMeetingAction = {
     type: typeof ADD_MEETING,
     payload: Meetings,
+}
+type ResetAction = {
+    type: typeof RESET_DATA,
+}
+
+export function resetData(): ResetAction {
+    setStorageData('localStorage', 'state', null)
+    return {
+        type: RESET_DATA,
+    }
 }
 
 export function setUser(emailId: string): UserAction {

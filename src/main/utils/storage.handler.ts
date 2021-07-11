@@ -34,12 +34,12 @@ export function getStorageData(type: StorageType, key: string): any {
     try {
         const serializedData = window?.[type].getItem(key)
 
-        if (serializedData === null) return null
+        if (serializedData === null) return undefined
 
         return serializedData
     } catch (er) {
         console.error(`getStorageData::Error in getting ${type}`)
-        return null
+        return undefined
     }
 }
 

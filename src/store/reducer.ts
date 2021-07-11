@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux'
-import { ADD_MEETING, SET_USER } from './actions'
+import { ADD_MEETING, RESET_DATA, SET_USER } from './actions'
 
 import { RootState } from './types'
 
@@ -11,6 +11,10 @@ const initialState: RootState = {
 
 function reducer(state = initialState, action: AnyAction): RootState {
     switch (action.type) {
+        case RESET_DATA: {
+            return initialState
+        }
+
         case SET_USER: {
             return {
                 ...state,
