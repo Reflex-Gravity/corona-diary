@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Card, CardContent, Typography, TextField, IconButton, Icon, makeStyles, CardActions } from '@material-ui/core'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
-import SelectPlaces from './components/SearchPlaces'
+import SearchPlaces from './components/SearchPlaces'
 import 'react-day-picker/lib/style.css'
 import { Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
@@ -54,7 +54,7 @@ function AddMeeting(): JSX.Element {
         const meetingData = {
             name,
             location: `${location.latitude},${location.longitude}`,
-            date: meetingDate.toLocaleDateString(),
+            date: meetingDate.getTime(),
             id: new Date().getTime(),
         }
         dispatch(addMeeting(meetingData))
@@ -82,7 +82,7 @@ function AddMeeting(): JSX.Element {
                         <Typography>
                             Location: {location.latitude},{location.longitude}
                         </Typography>
-                        <SelectPlaces onSelect={handleLocation} />
+                        <SearchPlaces onSelect={handleLocation} />
                     </div>
                 </div>
                 <Button className="meeting-submit-btn" color="primary" variant="contained" onClick={handleAddMeeting}>

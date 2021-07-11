@@ -1,4 +1,4 @@
-import React, { lazy, memo, useEffect, useState } from 'react'
+import React, { lazy, memo, useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { Card, CardContent, IconButton, Icon, Typography, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -11,11 +11,15 @@ import NoData from './components/NoData'
 import ListItem from './components/ListItem'
 import WrappedSuspense from './components/WrappedSuspense'
 import { FilterType, GroupedDataType } from './types/List'
+import { HandleDateChangeType } from './types/DateRange'
 
 const Filter = lazy(() => import('./components/Filter'))
 const GroupedListItem = lazy(() => import('./components/GroupedListItem'))
 
 const useStyles = makeStyles({
+    wrapper: {
+        position: 'relative',
+    },
     listWrapper: {
         position: 'relative',
         minHeight: 500,
@@ -29,15 +33,20 @@ const useStyles = makeStyles({
         marginBottom: 20,
     },
     button: {
-        position: 'sticky',
-        bottom: 10,
-        left: '100%',
+        position: 'absolute',
+        bottom: 30,
+        right: 30,
         backgroundColor: '#3f51b5',
         color: '#ffffff',
         '&:hover': {
             color: '#333',
             backgroundColor: '#aaa',
         },
+    },
+    title: {
+        marginTop: 10,
+        marginBottom: 10,
+        fontSize: 20,
     },
 })
 
@@ -62,7 +71,7 @@ function List() {
         if (!emailId) {
             history.push('/')
         }
-    }, [emailId])
+    }, [emailId, history])
 
     function handleSearch(evt: React.ChangeEvent<HTMLInputElement>) {
         setSearchText(evt.target.value)
@@ -76,7 +85,11 @@ function List() {
         setFilterOpen(!isFilterOpen)
     }
 
-    function handleFilter(type: string, newFilter: FilterType['fromDate'] | FilterType['toDate'] | FilterType['groupBy']) {
+    /**
+     * Sets filter selection at one place
+     *
+     */
+    function handleFilter(type: HandleDateChangeType['type'] | 'groupBy', newFilter: FilterType['fromDate'] | FilterType['toDate'] | FilterType['groupBy']) {
         const updatedFilter = {
             ...filter,
             [type]: newFilter,
@@ -84,8 +97,39 @@ function List() {
         setFilter(updatedFilter)
     }
 
-    const groupByData = () => {
+    function handleClearFilter() {
+        setFilter(defaultFilter)
+    }
+
+    const filteredData = meetings.filter(meeting => {
+        // returns meeting without filtering if no fiters are enabled.
+
+        // Filter the date based on search text
+        if (searchText.length > 0) {
+            if (meeting.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
+                return meeting
+            }
+            return false
+        }
+        // filter the data only when date filter is enabled
+        const isDateFilter = filter.fromDate && filter.toDate
+        if (isDateFilter) {
+            // Check if this meeting date is between from date and to date
+            // The date values here are in UNIX timestamp format
+            if (meeting.date >= (filter.fromDate ?? 0) && meeting.date <= (filter.toDate ?? 0)) {
+                return meeting
+            }
+            return false
+        }
+        return meeting
+    })
+
+    const groupedData: GroupedDataType = useMemo(() => {
+        // Do groupby conversion only if enabled
         if (filter.groupBy) {
+            // TODO:: avoid duplicaiton and merge the iteration.
+
+            // Groupby Date
             if (filter.groupBy === 'date') {
                 let groupedData: GroupedDataType = {}
                 meetings.forEach(_meeting => {
@@ -96,6 +140,7 @@ function List() {
                 })
                 return groupedData
             } else if (filter.groupBy === 'name') {
+                // Group by Name
                 let groupedData: GroupedDataType = {}
                 meetings.forEach(_meeting => {
                     groupedData = {
@@ -107,50 +152,45 @@ function List() {
             }
         }
         return {}
-    }
-
-    const filteredData = meetings.filter(_data => {
-        if (_data.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-            return _data
-        }
-    })
-
-    const groupedData = groupByData()
+    }, [filter.groupBy, meetings])
 
     return (
-        <Card className={clsx(classes.listWrapper)}>
-            <WrappedSuspense>
-                <CardContent>
-                    <Typography variant="h5">Hi {emailId}</Typography>
-                    <Typography className="mt-5" variant="h6">
-                        Your visits
-                    </Typography>
-                    <Logout />
-                    <div className={clsx('flex flex-row justify-between', classes.filterWrapper)}>
-                        <Input placeholder="Search..." value={searchText} onChange={handleSearch} />
-                        <IconButton onClick={toggleFilterView}>
-                            <Icon>filter_list</Icon>
-                        </IconButton>
-                        <WrappedSuspense>{isFilterOpen ? <Filter filter={filter} handleFilter={handleFilter} onClose={toggleFilterView} /> : null}</WrappedSuspense>
-                    </div>
-                    {
-                        // When no data show a message
-                        filteredData.length === 0 && <NoData />
-                    }
-                    {filter.groupBy ? (
-                        <GroupedListItem groupedData={groupedData} />
-                    ) : (
-                        filteredData.map(_meeting => {
-                            return <ListItem key={_meeting.id} {..._meeting} />
-                        })
-                    )}
-
-                    <IconButton color="primary" className={clsx(classes.button)} onClick={openAddMeeting}>
-                        <Icon>add</Icon>
-                    </IconButton>
-                </CardContent>
-            </WrappedSuspense>
-        </Card>
+        <div className={clsx(classes.wrapper)}>
+            <Card className={clsx(classes.listWrapper)}>
+                <WrappedSuspense>
+                    <CardContent>
+                        <Typography variant="h5">Hi {emailId}</Typography>
+                        <Typography className={classes.title} variant="body1" color="textSecondary">
+                            Your visits
+                        </Typography>
+                        <Logout />
+                        <div className={clsx('flex flex-row justify-between', classes.filterWrapper)}>
+                            <Input placeholder="Search..." value={searchText} onChange={handleSearch} />
+                            <IconButton onClick={toggleFilterView}>
+                                <Icon>filter_list</Icon>
+                            </IconButton>
+                            <WrappedSuspense>
+                                {isFilterOpen ? <Filter filter={filter} handleFilter={handleFilter} clearFilters={handleClearFilter} onClose={toggleFilterView} /> : null}
+                            </WrappedSuspense>
+                        </div>
+                        {
+                            // When no data show a message
+                            filteredData.length === 0 && <NoData />
+                        }
+                        {filter.groupBy ? (
+                            <GroupedListItem groupedData={groupedData} />
+                        ) : (
+                            filteredData.map(_meeting => {
+                                return <ListItem key={_meeting.id} {..._meeting} />
+                            })
+                        )}
+                    </CardContent>
+                </WrappedSuspense>
+            </Card>
+            <IconButton color="primary" className={clsx(classes.button)} onClick={openAddMeeting}>
+                <Icon>add</Icon>
+            </IconButton>
+        </div>
     )
 }
 

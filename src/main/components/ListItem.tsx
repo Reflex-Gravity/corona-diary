@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent, Typography, makeStyles } from '@material-ui/core'
 import { Meetings } from 'store/types'
 import clsx from 'clsx'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles({
     root: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles({
     date: {
         maxWidth: 300,
         fontSize: 12,
+        fontWeight: 'bold',
     },
     rightContent: {
         textAlign: 'right',
@@ -40,7 +42,7 @@ function ListItem({ name, date, location }: Meetings): JSX.Element {
                 <Typography className={classes.name}>{name}</Typography>
                 <div className={clsx('flex flex-col', classes.rightContent)}>
                     <Typography component="span" className={classes.date}>
-                        {date}
+                        {format(date, 'do MMM yyyy')}
                     </Typography>
                     <Typography className={classes.location}>{location}</Typography>
                 </div>
