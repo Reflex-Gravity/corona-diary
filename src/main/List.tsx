@@ -94,9 +94,12 @@ function List() {
             ...filter,
             [type]: newFilter,
         }
+        // reset groupBy filters when date range is selected
         if (type === 'fromDate' || type === 'toDate') {
             updatedFilter.groupBy = ''
-        } else if (type === 'groupBy') {
+        }
+        // reset date range filters when groupBy is selected
+        else if (type === 'groupBy') {
             updatedFilter.fromDate = null
             updatedFilter.toDate = null
         }
@@ -107,28 +110,35 @@ function List() {
         setFilter(defaultFilter)
     }
 
-    const filteredData = meetings.filter(meeting => {
-        // returns meeting without filtering if no fiters are enabled.
+    const filteredData = useMemo(() => {
+        // Filters the meetings if they are available
+        if (searchText.length > 0 || filter.fromDate || filter.toDate) {
+            return meetings.filter(meeting => {
+                // returns meeting without filtering if no fiters are enabled.
 
-        // Filter the date based on search text
-        if (searchText.length > 0) {
-            if (meeting.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
+                // Filter the date based on search text
+                if (searchText.length > 0) {
+                    if (meeting.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
+                        return meeting
+                    }
+                    return false
+                }
+                // filter the data only when date filter is enabled
+                const isDateFilter = filter.fromDate && filter.toDate
+                if (isDateFilter) {
+                    // Check if this meeting date is between from date and to date
+                    // The date values here are in UNIX timestamp format
+                    if (meeting.date >= (filter.fromDate ?? 0) && meeting.date <= (filter.toDate ?? 0)) {
+                        return meeting
+                    }
+                    return false
+                }
                 return meeting
-            }
-            return false
+            })
         }
-        // filter the data only when date filter is enabled
-        const isDateFilter = filter.fromDate && filter.toDate
-        if (isDateFilter) {
-            // Check if this meeting date is between from date and to date
-            // The date values here are in UNIX timestamp format
-            if (meeting.date >= (filter.fromDate ?? 0) && meeting.date <= (filter.toDate ?? 0)) {
-                return meeting
-            }
-            return false
-        }
-        return meeting
-    })
+        // return meetings, if no filters are available
+        return meetings
+    }, [filter.fromDate, filter.toDate, meetings, searchText])
 
     const groupedData: GroupedDataType = useMemo(() => {
         // Do groupby conversion only if enabled
