@@ -3,7 +3,7 @@ import { ADD_MEETING, RESET_DATA, SET_USER } from './actions'
 
 import { RootState } from './types'
 
-const initialState: RootState = {
+export const initialState: RootState = {
     emailId: '',
     meetings: [],
     groups: [],
