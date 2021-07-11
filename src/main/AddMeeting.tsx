@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
-import { Card, CardContent, Typography, TextField, IconButton, Icon, makeStyles, CardActions } from '@material-ui/core'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
-import SearchPlaces from './components/SearchPlaces'
-import 'react-day-picker/lib/style.css'
-import { Button } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { Card, CardContent, Typography, TextField, IconButton, Icon, makeStyles, CardActions, Button } from '@material-ui/core'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { addMeeting } from 'store/actions'
 
+import 'react-day-picker/lib/style.css'
+
+import LocateMe from './components/LocateMe'
 import Logout from './components/Logout'
+import clsx from 'clsx'
 
 const useStyles = makeStyles({
     margin: {
-        marginTop: 5,
+        marginTop: 10,
+        marginBottom: 10,
     },
 })
 
@@ -75,14 +77,14 @@ function AddMeeting(): JSX.Element {
                     <Typography variant="h6">Add Meeting</Typography>
                 </CardActions>
                 <Logout />
-                <div className="add-meeting-form flex flex-col">
-                    <TextField className="mt-5" label="Person Name" value={name} onChange={handleNameChange} />
+                <div className="flex flex-col">
+                    <TextField className={classes.margin} label="Person Name" value={name} onChange={handleNameChange} />
                     <DayPickerInput component={DateInput} value={meetingDate} onDayChange={handleDateChange} />
-                    <div className="flex items-center mt-5">
-                        <Typography>
+                    <div className={clsx(classes.margin, 'flex items-center mt-5')}>
+                        <Typography className={classes.margin}>
                             Location: {location.latitude},{location.longitude}
                         </Typography>
-                        <SearchPlaces onSelect={handleLocation} />
+                        <LocateMe onSelect={handleLocation} />
                     </div>
                 </div>
                 <Button className="meeting-submit-btn" color="primary" variant="contained" onClick={handleAddMeeting}>

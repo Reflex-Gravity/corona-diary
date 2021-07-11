@@ -94,6 +94,12 @@ function List() {
             ...filter,
             [type]: newFilter,
         }
+        if (type === 'fromDate' || type === 'toDate') {
+            updatedFilter.groupBy = ''
+        } else if (type === 'groupBy') {
+            updatedFilter.fromDate = null
+            updatedFilter.toDate = null
+        }
         setFilter(updatedFilter)
     }
 
