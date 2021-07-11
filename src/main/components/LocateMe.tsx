@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
-import { IconButton, Icon } from '@material-ui/core'
+import { IconButton, Icon, makeStyles, Tooltip } from '@material-ui/core'
 import { getPosition } from 'main/api'
 import { Typography } from '@material-ui/core'
+
+const useStyles = makeStyles({
+    button: {
+        marginLeft: 10,
+    },
+})
 
 interface OnSelectFunc {
     (pos: GeolocationPosition): void;
@@ -14,6 +20,7 @@ type Props = {
 function SearchPlaces({ onSelect }: Props): JSX.Element {
     const [error, setError] = useState(0)
     const [isLocating, setLocating] = useState(false)
+    const classes = useStyles()
 
     function getLocation() {
         setLocating(true)
@@ -31,9 +38,11 @@ function SearchPlaces({ onSelect }: Props): JSX.Element {
 
     return (
         <div>
-            <IconButton size="small" onClick={getLocation}>
-                <Icon>my_location</Icon>
-            </IconButton>
+            <Tooltip title="Locate me">
+                <IconButton className={classes.button} size="small" onClick={getLocation}>
+                    <Icon>my_location</Icon>
+                </IconButton>
+            </Tooltip>
             {isLocating && <Typography>Locating...</Typography>}
             <Typography className="text-red">{error === 1 && 'Check your location permission.'}</Typography>
         </div>

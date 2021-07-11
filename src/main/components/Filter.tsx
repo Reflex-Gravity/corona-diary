@@ -47,10 +47,12 @@ type FilterProps = {
 function Filter({ filter, handleFilter, onClose, clearFilters }: FilterProps): JSX.Element {
     const classes = useStyles()
 
+    // handles groupby filters, sets the groupBy type value in filter state.
     function handleGroupBy(evt: React.ChangeEvent<HTMLInputElement>) {
         handleFilter('groupBy', evt.target.value)
     }
 
+    // handles Date Range filters, sets the fromDate and toDate value in filter state.
     function handleDateFilter(type: HandleDateChangeType['type'], date: HandleDateChangeType['date']) {
         handleFilter(type, date)
     }
@@ -58,13 +60,16 @@ function Filter({ filter, handleFilter, onClose, clearFilters }: FilterProps): J
     return (
         <ClickAwayListener onClickAway={onClose}>
             <Card className={clsx(classes.root)} elevation={3}>
+                {/* Card Header */}
                 <CardActions className={clsx(classes.cardHeader)}>
                     <Typography variant="h6">Filters</Typography>
                     <IconButton size="small" onClick={onClose}>
                         <Icon>close</Icon>
                     </IconButton>
                 </CardActions>
+                {/* Card Content */}
                 <CardContent>
+                    {/* Group By fields */}
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Group By</FormLabel>
                         <RadioGroup row aria-label="group_by" name="group_by" value={filter.groupBy} onChange={handleGroupBy}>
@@ -73,13 +78,14 @@ function Filter({ filter, handleFilter, onClose, clearFilters }: FilterProps): J
                             <FormControlLabel value="name" control={<Radio />} label="Name" />
                         </RadioGroup>
                     </FormControl>
-
+                    {/* Date Range fields */}
                     <FormControl className={classes.dateRange} component="fieldset">
                         <FormLabel className={classes.dateRangeLabel} component="legend">
                             Date Range
                         </FormLabel>
                         <DateRange fromDate={filter.fromDate} toDate={filter.toDate} handleDateChange={handleDateFilter} />
                     </FormControl>
+                    {/* Clear button */}
                     <Button variant="contained" color="primary" className={classes.clearBtn} onClick={clearFilters}>
                         Clear
                     </Button>
