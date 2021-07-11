@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux'
-import { SET_USER } from './actions'
+import { ADD_MEETING, SET_USER } from './actions'
 
 import { RootState } from './types'
 
@@ -15,6 +15,12 @@ function reducer(state = initialState, action: AnyAction): RootState {
             return {
                 ...state,
                 emailId: action.emailId,
+            }
+        }
+        case ADD_MEETING: {
+            return {
+                ...state,
+                meetings: [...state.meetings, { ...action.payload }],
             }
         }
     }

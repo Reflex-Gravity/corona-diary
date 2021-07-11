@@ -8,7 +8,7 @@ export interface Meetings {
     date: Date;
     location: string;
     name: string;
-    group_id: string;
+    group_id: number;
 }
 
 export interface Groups {
