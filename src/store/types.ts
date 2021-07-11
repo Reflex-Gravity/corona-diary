@@ -5,10 +5,10 @@ export interface RootState {
 }
 
 export interface Meetings {
-    date: Date;
+    date: string;
     location: string;
     name: string;
-    group_id: number;
+    id: number;
 }
 
 export interface Groups {

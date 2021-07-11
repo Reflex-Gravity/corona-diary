@@ -85,6 +85,9 @@ button.meeting-submit-btn{
 .justify-between{
   justify-content: space-between;
 }
+.items-center{
+  align-items: center;
+}
 
 .w-full{
   width: 100%;
@@ -92,4 +95,8 @@ button.meeting-submit-btn{
 
 .mr-5{
   margin-right: 5px;
+}
+
+.mt-5 {
+  margin-top: 5px;
 }

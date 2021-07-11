@@ -31,7 +31,7 @@ function SearchPlaces({ onSelect }: Props): JSX.Element {
 
     return (
         <div>
-            <IconButton onClick={getLocation}>
+            <IconButton size="small" onClick={getLocation}>
                 <Icon>my_location</Icon>
             </IconButton>
             {isLocating && <Typography>Locating...</Typography>}
