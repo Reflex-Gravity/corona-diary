@@ -5,7 +5,7 @@ export interface RootState {
 }
 
 export interface Meetings {
-    date: string;
+    date: number;
     location: string;
     name: string;
     id: number;
