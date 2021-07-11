@@ -26,5 +26,6 @@ module.exports = {
         'prettier/prettier': 'error',
         'no-console': 'warn',
         'no-eval': 'error',
+        '@typescript-eslint/no-explicit-any': 'off',
     },
 }

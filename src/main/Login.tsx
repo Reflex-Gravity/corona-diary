@@ -22,7 +22,7 @@ function Login(): JSX.Element {
             dispatch(setUser(sessionEmailId))
             history.push(`/list/`)
         }
-    }, [])
+    }, [dispatch, history])
 
     function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
         setEmailId(evt.target.value)
@@ -41,7 +41,7 @@ function Login(): JSX.Element {
             <CardContent>
                 <Typography>Your Name</Typography>
                 <form role="form" className="flex flex-col login-form" action="">
-                    <TextField className="w-full" label="Email" id="email" name="email" type="email" value={emailId} onChange={handleChange} />
+                    <TextField className="w-full" label="Name" id="name" name="name" type="text" value={emailId} onChange={handleChange} />
                     <Button className="login-btn" role="button" color="primary" variant="contained" aria-label="Login" type="submit" onClick={handleSubmit}>
                         Login
                     </Button>

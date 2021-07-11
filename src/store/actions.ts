@@ -1,4 +1,4 @@
-import { removeStorageData, setStorageData } from 'main/utils/storage.handler'
+import { removeStorageData } from 'main/utils/storage.handler'
 import { Meetings } from './types'
 
 export const SET_USER = 'SET_USER'

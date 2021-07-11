@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 type StorageType = 'sessionStorage' | 'localStorage'
 
 /**
@@ -6,8 +7,8 @@ type StorageType = 'sessionStorage' | 'localStorage'
  * @param {'localStorage'|'sessionStorage'} type type of Storage
  * @param {string} key
  * @param {*} data Data to set for the key, Objects will be stringified
- * @memberof WebStorage
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function setStorageData(type: StorageType, key: string, data: any): void {
     try {
         let serializedData = data
@@ -28,7 +29,6 @@ export function setStorageData(type: StorageType, key: string, data: any): void 
  * @param {'localStorage'|'sessionStorage'} type type of Storage
  * @param {string} key
  * @returns
- * @memberof WebStorage
  */
 export function getStorageData(type: StorageType, key: string): any {
     try {
