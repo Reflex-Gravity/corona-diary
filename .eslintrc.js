@@ -6,6 +6,7 @@ module.exports = {
     extends: [
         'plugin:react/recommended', // recommended rules for react
         'plugin:@typescript-eslint/recommended',
+        'plugin:react-hooks/recommended', // react-hooks recommended rules
         'prettier', // disable formatting in eslint instead uses prettier
         'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
     ],
