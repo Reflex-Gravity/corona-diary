@@ -5,6 +5,6 @@ export interface GroupedDataType {
 }
 export type FilterType = {
     groupBy: string,
-    fromDate: Date | null,
-    toDate: Date | null,
+    fromDate: number | null,
+    toDate: number | null,
 }

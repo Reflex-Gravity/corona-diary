@@ -1,46 +1,50 @@
-import React, { useRef, useState } from 'react'
+import React, { forwardRef } from 'react'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
-import { FilterType } from 'main/types/List'
-
+import { makeStyles, TextField } from '@material-ui/core'
 import 'react-day-picker/lib/style.css'
+import { DateRangeType } from 'main/types/DateRange'
 
-type DateRangeType = {
-    fromDate: FilterType['fromDate'],
-    toDate: FilterType['toDate'],
-}
+const useStyles = makeStyles({
+    dateInput: {
+        marginLeft: 10,
+    },
+})
 
-function DateRange({ fromDate, toDate }: DateRangeType): JSX.Element {
-    const toDateRef = useRef(null)
-    const [from, setFrom] = useState(new Date())
-    const [to, setTo] = useState(new Date())
+// eslint-disable-next-line react/display-name
+const DateInput = forwardRef((props: never, ref) => {
+    const classes = useStyles()
+    return <TextField ref={ref} className={classes.dateInput} {...props} />
+})
 
+function DateRange({ fromDate, toDate, handleDateChange }: DateRangeType): JSX.Element {
     function handleFromChange(_from: Date) {
-        setFrom(_from)
+        handleDateChange('fromDate', _from.getTime())
     }
 
     function handleToChange(_to: Date) {
-        setTo(_to)
+        handleDateChange('toDate', _to.getTime())
     }
 
     return (
-        <div>
+        <div className="flex">
             <DayPickerInput
-                value={from}
-                placeholder="From"
-                format="LL"
+                value={fromDate ? new Date(fromDate) : undefined}
+                placeholder="Start Date"
+                format="DD/MM/YYYY"
+                component={DateInput}
                 dayPickerProps={{
-                    disabledDays: { after: to },
+                    disabledDays: { after: new Date(toDate ?? '') },
                 }}
                 onDayChange={handleFromChange}
             />{' '}
             —{' '}
             <DayPickerInput
-                ref={toDateRef}
-                value={to}
-                placeholder="To"
-                format="LL"
+                value={toDate ? new Date(toDate) : undefined}
+                placeholder="End Date"
+                format="DD/MM/YYYY"
+                component={DateInput}
                 dayPickerProps={{
-                    disabledDays: { before: from },
+                    disabledDays: { before: new Date(fromDate ?? '') },
                 }}
                 onDayChange={handleToChange}
             />
