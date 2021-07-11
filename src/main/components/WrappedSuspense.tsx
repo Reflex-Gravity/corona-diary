@@ -4,7 +4,7 @@ import clsx from 'clsx'
 
 const useStyles = makeStyles({
     loader: {
-        position: 'fixed',
+        position: 'relative',
         top: 10,
         right: 0,
         left: 0,
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 })
 
 type Props = {
-    children: JSX.Element,
+    children: JSX.Element | null,
 }
 
 function WrappedSuspense(props: Props): JSX.Element {
