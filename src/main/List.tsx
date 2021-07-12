@@ -114,7 +114,7 @@ function List() {
     const filteredData = useMemo(() => {
         // Filters the meetings if they are available
         if (searchText.length > 0 || filter.fromDate || filter.toDate) {
-            return [...meetings].filter(meeting => {
+            return meetings.filter(meeting => {
                 // returns meeting without filtering if no fiters are enabled.
 
                 // Filter the date based on search text
