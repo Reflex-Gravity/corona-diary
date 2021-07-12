@@ -5,7 +5,6 @@ import store from './store'
 import WrappedSuspense from './main/components/WrappedSuspense'
 import { Container } from '@material-ui/core'
 
-import './App.css'
 import './index.css'
 
 const List = lazy(() => import('./main/List'))
