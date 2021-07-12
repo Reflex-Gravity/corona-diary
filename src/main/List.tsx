@@ -115,7 +115,7 @@ function List() {
         // Filters the meetings if they are available
         if (searchText.length > 0 || filter.fromDate || filter.toDate) {
             return meetings
-                .sort((elA, elB) => elA.date - elB.date)
+                .sort((elA, elB) => elA.date - elB.date) // sort the meeting by date
                 .filter(meeting => {
                     // returns meeting without filtering if no fiters are enabled.
 
