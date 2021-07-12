@@ -4,6 +4,7 @@ import { makeStyles, TextField } from '@material-ui/core'
 import 'react-day-picker/lib/style.css'
 import { DateRangeType } from 'main/types/DateRange'
 import clsx from 'clsx'
+import { isDate } from 'date-fns/esm'
 
 const useStyles = makeStyles({
     dateInput: {
@@ -36,11 +37,17 @@ const DateInput = forwardRef((props: never, ref) => {
 
 function DateRange({ fromDate, toDate, handleDateChange }: DateRangeType): JSX.Element {
     function handleFromChange(_from: Date) {
-        handleDateChange('fromDate', _from.getTime())
+        // validate the date
+        if (isDate(_from)) {
+            handleDateChange('fromDate', _from.getTime())
+        }
     }
 
     function handleToChange(_to: Date) {
-        handleDateChange('toDate', _to.getTime())
+        // validate the date
+        if (isDate(_to)) {
+            handleDateChange('toDate', _to.getTime())
+        }
     }
 
     return (

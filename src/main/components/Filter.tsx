@@ -54,7 +54,9 @@ function Filter({ filter, handleFilter, onClose, clearFilters }: FilterProps): J
 
     // handles Date Range filters, sets the fromDate and toDate value in filter state.
     function handleDateFilter(type: HandleDateChangeType['type'], date: HandleDateChangeType['date']) {
-        handleFilter(type, date)
+        if (typeof date === 'number') {
+            handleFilter(type, date)
+        }
     }
 
     return (
