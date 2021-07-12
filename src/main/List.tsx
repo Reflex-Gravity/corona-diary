@@ -114,28 +114,30 @@ function List() {
     const filteredData = useMemo(() => {
         // Filters the meetings if they are available
         if (searchText.length > 0 || filter.fromDate || filter.toDate) {
-            return meetings.filter(meeting => {
-                // returns meeting without filtering if no fiters are enabled.
+            return meetings
+                .sort((elA, elB) => elA.date - elB.date)
+                .filter(meeting => {
+                    // returns meeting without filtering if no fiters are enabled.
 
-                // Filter the date based on search text
-                if (searchText.length > 0) {
-                    if (meeting.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                        return meeting
+                    // Filter the date based on search text
+                    if (searchText.length > 0) {
+                        if (meeting.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
+                            return meeting
+                        }
+                        return false
                     }
-                    return false
-                }
-                // filter the data only when date filter is enabled
-                const isDateFilter = filter.fromDate && filter.toDate
-                if (isDateFilter) {
-                    // Check if this meeting date is between from date and to date
-                    // The date values here are in UNIX timestamp format
-                    if (meeting.date >= (filter.fromDate ?? 0) && meeting.date <= (filter.toDate ?? 0)) {
-                        return meeting
+                    // filter the data only when date filter is enabled
+                    const isDateFilter = filter.fromDate && filter.toDate
+                    if (isDateFilter) {
+                        // Check if this meeting date is between from date and to date
+                        // The date values here are in UNIX timestamp format
+                        if (meeting.date >= (filter.fromDate ?? 0) && meeting.date <= (filter.toDate ?? 0)) {
+                            return meeting
+                        }
+                        return false
                     }
-                    return false
-                }
-                return meeting
-            })
+                    return meeting
+                })
         }
         // return meetings, if no filters are available
         return meetings
@@ -149,14 +151,16 @@ function List() {
             // Groupby Date
             if (filter.groupBy === 'date') {
                 let groupedData: GroupedDataType = {}
-                meetings.forEach(_meeting => {
-                    const formattedDate = format(_meeting.date, 'do MMM yyyy')
-                    // Create a list of date to meeting list map
-                    groupedData = {
-                        ...groupedData,
-                        [formattedDate]: [...(groupedData?.[formattedDate] ?? []), { ..._meeting }],
-                    }
-                })
+                meetings
+                    .sort((elA, elB) => elA.date - elB.date)
+                    .forEach(_meeting => {
+                        const formattedDate = format(_meeting.date, 'do MMM yyyy')
+                        // Create a list of date to meeting list map
+                        groupedData = {
+                            ...groupedData,
+                            [formattedDate]: [...(groupedData?.[formattedDate] ?? []), { ..._meeting }],
+                        }
+                    })
                 return groupedData
             } else if (filter.groupBy === 'name') {
                 // Group by Name

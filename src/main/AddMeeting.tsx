@@ -10,6 +10,7 @@ import 'react-day-picker/lib/style.css'
 import LocateMe from './components/LocateMe'
 import Logout from './components/Logout'
 import clsx from 'clsx'
+import { isDate } from 'date-fns'
 
 const useStyles = makeStyles({
     margin: {
@@ -46,7 +47,9 @@ function AddMeeting(): JSX.Element {
     }
 
     function handleDateChange(date: Date) {
-        setMeetingDate(date)
+        if (isDate(date)) {
+            setMeetingDate(date)
+        }
     }
 
     function handleLocation(pos: GeolocationPosition): void {
