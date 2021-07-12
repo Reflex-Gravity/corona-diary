@@ -12,6 +12,7 @@ import ListItem from './components/ListItem'
 import WrappedSuspense from './components/WrappedSuspense'
 import { FilterType, GroupedDataType } from './types/List'
 import { HandleDateChangeType } from './types/DateRange'
+import { format } from 'date-fns'
 
 const Filter = lazy(() => import('./components/Filter'))
 const GroupedListItem = lazy(() => import('./components/GroupedListItem'))
@@ -149,9 +150,11 @@ function List() {
             if (filter.groupBy === 'date') {
                 let groupedData: GroupedDataType = {}
                 meetings.forEach(_meeting => {
+                    const formattedDate = format(_meeting.date, 'do MMM yyyy')
+                    // Create a list of date to meeting list map
                     groupedData = {
                         ...groupedData,
-                        [_meeting.date]: [...(groupedData?.[_meeting.date] ?? []), { ..._meeting }],
+                        [formattedDate]: [...(groupedData?.[formattedDate] ?? []), { ..._meeting }],
                     }
                 })
                 return groupedData
@@ -159,6 +162,7 @@ function List() {
                 // Group by Name
                 let groupedData: GroupedDataType = {}
                 meetings.forEach(_meeting => {
+                    // Create a list of Name to meeting list map
                     groupedData = {
                         ...groupedData,
                         [_meeting.name]: [...(groupedData?.[_meeting.name] ?? []), { ..._meeting }],
